@@ -917,3 +917,211 @@
 }
 
 
+/* =========================================================
+   EMPLOYEE PAGINATION
+========================================================= */
+
+.employee-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 18px 22px;
+
+  border-top: 1px solid #eaecf0;
+
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   PAGINATION INFO
+========================================================= */
+
+.pagination-info {
+  color: #667085;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.pagination-info strong {
+  color: #344054;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   PAGINATION CONTROLS
+========================================================= */
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+/* =========================================================
+   PREVIOUS / NEXT
+========================================================= */
+
+.pagination-btn {
+  height: 36px;
+
+  padding: 0 12px;
+
+  border: 1px solid #d0d5dd;
+
+  background: #ffffff;
+
+  color: #344054;
+
+  border-radius: 7px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #98a2b3;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   PAGE NUMBERS
+========================================================= */
+
+.pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pagination-page {
+  width: 36px;
+  height: 36px;
+
+  border: 1px solid transparent;
+
+  background: transparent;
+
+  color: #475467;
+
+  border-radius: 7px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.pagination-page:hover {
+  background: #f2f4f7;
+}
+
+.pagination-page.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.pagination-dots {
+  width: 28px;
+
+  text-align: center;
+
+  color: #98a2b3;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   TABLE LOADING
+========================================================= */
+
+.employees-table-loading {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  min-height: 60px;
+
+  color: #667085;
+
+  font-size: 13px;
+
+  border-top: 1px solid #eaecf0;
+
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+  .employee-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pagination-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .employee-pagination {
+    padding: 16px;
+  }
+
+  .pagination-info {
+    font-size: 12px;
+  }
+
+  .pagination-controls {
+    flex-wrap: wrap;
+  }
+
+  .pagination-pages {
+    order: 2;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pagination-prev,
+  .pagination-next {
+    flex: 1;
+  }
+
+  .pagination-page {
+    width: 34px;
+    height: 34px;
+  }
+}

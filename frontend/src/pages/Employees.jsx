@@ -1,4 +1,5 @@
 // frontend/src/pages/Employees.jsx
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,60 +11,179 @@ import "./Employees.css";
 function Employees() {
   const navigate = useNavigate();
 
+  /* =========================================================
+     STATE
+  ========================================================= */
+
   const [employees, setEmployees] = useState([]);
+
   const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState("");
+
   const [showForm, setShowForm] = useState(false);
+
   const [search, setSearch] = useState("");
 
-  const loadEmployees = async () => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [totalEmployees, setTotalEmployees] = useState(0);
+
+  const [pageSize] = useState(100);
+
+  /* =========================================================
+     LOAD EMPLOYEES
+  ========================================================= */
+
+  const loadEmployees = async (
+    page = currentPage,
+    searchValue = search
+  ) => {
     try {
       setLoading(true);
       setError("");
 
-      const data = await getEmployees();
+      const data = await getEmployees({
+        page,
+        page_size: pageSize,
+        search: searchValue.trim() || undefined,
+      });
 
-      setEmployees(data?.items ?? data ?? []);
+      setEmployees(data?.items ?? []);
+
+      setTotalEmployees(data?.total ?? 0);
+
     } catch (err) {
       console.error("Employees error:", err);
-      setError("Unable to load employees.");
+
+      console.error(
+        "Backend response:",
+        err.response?.data
+      );
+
+      setError(
+        err.response?.data?.detail ||
+          "Unable to load employees."
+      );
+
+      setEmployees([]);
+      setTotalEmployees(0);
+
     } finally {
       setLoading(false);
     }
   };
 
+  /* =========================================================
+     INITIAL LOAD
+  ========================================================= */
+
   useEffect(() => {
-    loadEmployees();
+    loadEmployees(1, "");
   }, []);
 
-  const filteredEmployees = employees.filter((employee) => {
-    const searchValue = search.toLowerCase().trim();
+  /* =========================================================
+     SEARCH
+  ========================================================= */
 
-    if (!searchValue) {
-      return true;
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+
+    setSearch(value);
+    setCurrentPage(1);
+
+    loadEmployees(1, value);
+  };
+
+  const clearSearch = () => {
+    setSearch("");
+    setCurrentPage(1);
+
+    loadEmployees(1, "");
+  };
+
+  /* =========================================================
+     PAGINATION
+  ========================================================= */
+
+  const totalPages = Math.ceil(
+    totalEmployees / pageSize
+  );
+
+  const handlePageChange = (page) => {
+    if (
+      page < 1 ||
+      page > totalPages ||
+      page === currentPage
+    ) {
+      return;
     }
 
-    const fullName =
-      `${employee.first_name ?? ""} ${employee.last_name ?? ""}`
-        .toLowerCase()
-        .trim();
+    setCurrentPage(page);
 
-    return (
-      employee.employee_code
-        ?.toLowerCase()
-        .includes(searchValue) ||
-      fullName.includes(searchValue) ||
-      employee.email?.toLowerCase().includes(searchValue) ||
-      employee.designation?.toLowerCase().includes(searchValue)
+    loadEmployees(page, search);
+  };
+
+  /* =========================================================
+     PAGE NUMBERS
+  ========================================================= */
+
+  const getPageNumbers = () => {
+    if (totalPages <= 7) {
+      return Array.from(
+        { length: totalPages },
+        (_, index) => index + 1
+      );
+    }
+
+    const pages = [];
+
+    pages.push(1);
+
+    if (currentPage > 4) {
+      pages.push("...");
+    }
+
+    const start = Math.max(
+      2,
+      currentPage - 1
     );
-  });
+
+    const end = Math.min(
+      totalPages - 1,
+      currentPage + 1
+    );
+
+    for (let page = start; page <= end; page++) {
+      pages.push(page);
+    }
+
+    if (currentPage < totalPages - 3) {
+      pages.push("...");
+    }
+
+    pages.push(totalPages);
+
+    return pages;
+  };
+
+  /* =========================================================
+     EMPLOYEE INITIALS
+  ========================================================= */
 
   const getInitials = (employee) => {
-    const first = employee.first_name?.charAt(0) ?? "";
-    const last = employee.last_name?.charAt(0) ?? "";
+    const first =
+      employee.first_name?.charAt(0) ?? "";
+
+    const last =
+      employee.last_name?.charAt(0) ?? "";
 
     return `${first}${last}`.toUpperCase();
   };
+
+  /* =========================================================
+     STATUS
+  ========================================================= */
 
   const getStatusClass = (status) => {
     switch (status?.toLowerCase()) {
@@ -87,26 +207,52 @@ function Employees() {
     return status.toUpperCase();
   };
 
-  if (loading) {
+  /* =========================================================
+     DISPLAY RANGE
+  ========================================================= */
+
+  const startRecord =
+    totalEmployees === 0
+      ? 0
+      : (currentPage - 1) * pageSize + 1;
+
+  const endRecord = Math.min(
+    currentPage * pageSize,
+    totalEmployees
+  );
+
+  /* =========================================================
+     LOADING
+  ========================================================= */
+
+  if (loading && employees.length === 0) {
     return (
       <div className="employees-page">
         <div className="employees-loading">
           <div className="loading-spinner" />
+
           <p>Loading employees...</p>
         </div>
       </div>
     );
   }
 
+  /* =========================================================
+     PAGE
+  ========================================================= */
+
   return (
     <div className="employees-page">
       <div className="employees-wrapper">
 
-        {/* ================= PAGE HEADER ================= */}
+        {/* =====================================================
+            PAGE HEADER
+        ===================================================== */}
 
         <div className="employees-header">
 
           <div className="employees-title-section">
+
             <div className="page-icon">
               👥
             </div>
@@ -115,69 +261,105 @@ function Employees() {
               <h1>Employees</h1>
 
               <p>
-                Manage your employees, departments and salaries
+                Manage your employees, departments and
+                salaries
               </p>
             </div>
+
           </div>
 
           <button
             className="add-employee-btn"
             onClick={() => setShowForm(true)}
           >
-            <span className="add-icon">+</span>
-            <span>Add Employee</span>
+            <span className="add-icon">
+              +
+            </span>
+
+            <span>
+              Add Employee
+            </span>
           </button>
 
         </div>
 
-        {/* ================= ERROR ================= */}
+        {/* =====================================================
+            ERROR
+        ===================================================== */}
 
         {error && (
           <div className="employee-error">
-            <span className="error-icon">!</span>
 
-            <span>{error}</span>
+            <span className="error-icon">
+              !
+            </span>
 
-            <button onClick={loadEmployees}>
+            <span>
+              {error}
+            </span>
+
+            <button
+              onClick={() =>
+                loadEmployees(
+                  currentPage,
+                  search
+                )
+              }
+            >
               Retry
             </button>
+
           </div>
         )}
 
-        {/* ================= ADD FORM ================= */}
+        {/* =====================================================
+            ADD FORM
+        ===================================================== */}
 
         {showForm && (
           <div className="employee-form-wrapper">
+
             <EmployeeForm
               onSuccess={() => {
                 setShowForm(false);
-                loadEmployees();
+
+                setCurrentPage(1);
+
+                loadEmployees(1, search);
               }}
               onCancel={() => {
                 setShowForm(false);
               }}
             />
+
           </div>
         )}
 
-        {/* ================= SEARCH ================= */}
+        {/* =====================================================
+            SEARCH
+        ===================================================== */}
 
         <div className="employee-search-card">
 
           <div className="search-header">
 
             <div>
-              <h3>Find an employee</h3>
+              <h3>
+                Find an employee
+              </h3>
 
               <p>
-                Search by employee code, name, email or designation
+                Search by employee code, name,
+                email or designation
               </p>
             </div>
 
             {search && (
               <span className="search-result-count">
-                {filteredEmployees.length} result
-                {filteredEmployees.length !== 1 ? "s" : ""}
+                {totalEmployees} result
+                {totalEmployees !== 1
+                  ? "s"
+                  : ""}
               </span>
             )}
 
@@ -192,9 +374,7 @@ function Employees() {
             <input
               type="text"
               value={search}
-              onChange={(event) =>
-                setSearch(event.target.value)
-              }
+              onChange={handleSearchChange}
               placeholder="Search employee code, name or email..."
             />
 
@@ -202,7 +382,7 @@ function Employees() {
               <button
                 type="button"
                 className="clear-search"
-                onClick={() => setSearch("")}
+                onClick={clearSearch}
                 aria-label="Clear search"
               >
                 ×
@@ -213,11 +393,13 @@ function Employees() {
 
         </div>
 
-        {/* ================= DIRECTORY ================= */}
+        {/* =====================================================
+            DIRECTORY
+        ===================================================== */}
 
         <div className="employee-directory">
 
-          {/* Directory Header */}
+          {/* DIRECTORY HEADER */}
 
           <div className="directory-header">
 
@@ -228,36 +410,46 @@ function Employees() {
               </div>
 
               <div>
-                <h2>Employee Directory</h2>
+
+                <h2>
+                  Employee Directory
+                </h2>
 
                 <p>
                   {search
-                    ? `Showing ${filteredEmployees.length} matching employee${
-                        filteredEmployees.length !== 1
+                    ? `Showing ${totalEmployees} matching employee${
+                        totalEmployees !== 1
                           ? "s"
                           : ""
                       }`
                     : "All employees in your organization"}
                 </p>
+
               </div>
 
             </div>
 
             <div className="employee-count">
-              <strong>{filteredEmployees.length}</strong>
+
+              <strong>
+                {totalEmployees}
+              </strong>
 
               <span>
-                {filteredEmployees.length === 1
+                {totalEmployees === 1
                   ? "Employee"
                   : "Employees"}
               </span>
+
             </div>
 
           </div>
 
-          {/* ================= EMPTY STATE ================= */}
+          {/* =================================================
+              EMPTY STATE
+          ================================================= */}
 
-          {filteredEmployees.length === 0 ? (
+          {employees.length === 0 ? (
 
             <div className="empty-employees">
 
@@ -276,162 +468,334 @@ function Employees() {
               </p>
 
               {search ? (
+
                 <button
                   className="secondary-btn"
-                  onClick={() => setSearch("")}
+                  onClick={clearSearch}
                 >
                   Clear Search
                 </button>
+
               ) : (
+
                 <button
                   className="add-employee-btn"
-                  onClick={() => setShowForm(true)}
+                  onClick={() =>
+                    setShowForm(true)
+                  }
                 >
-                  <span className="add-icon">+</span>
+                  <span className="add-icon">
+                    +
+                  </span>
+
                   Add Employee
                 </button>
+
               )}
 
             </div>
 
           ) : (
 
-            /* ================= TABLE ================= */
+            <>
+              {/* ===============================================
+                  TABLE
+              =============================================== */}
 
-            <div className="employee-table-wrapper">
+              <div className="employee-table-wrapper">
 
-              <table className="employee-table">
+                <table className="employee-table">
 
-                <thead>
-                  <tr>
-                    <th>EMPLOYEE</th>
-                    <th>EMAIL</th>
-                    <th>DEPARTMENT</th>
-                    <th>DESIGNATION</th>
-                    <th>STATUS</th>
-                    <th className="action-column">
-                      ACTION
-                    </th>
-                  </tr>
-                </thead>
+                  <thead>
+                    <tr>
 
-                <tbody>
+                      <th>
+                        EMPLOYEE
+                      </th>
 
-                  {filteredEmployees.map((employee) => (
+                      <th>
+                        EMAIL
+                      </th>
 
-                    <tr key={employee.id}>
+                      <th>
+                        DEPARTMENT
+                      </th>
 
-                      {/* EMPLOYEE */}
+                      <th>
+                        DESIGNATION
+                      </th>
 
-                      <td>
+                      <th>
+                        STATUS
+                      </th>
 
-                        <div className="employee-profile">
-
-                          <div className="employee-avatar">
-                            {getInitials(employee)}
-                          </div>
-
-                          <div className="employee-name">
-
-                            <strong>
-                              {employee.first_name}{" "}
-                              {employee.last_name}
-                            </strong>
-
-                            <span>
-                              {employee.employee_code}
-                            </span>
-
-                          </div>
-
-                        </div>
-
-                      </td>
-
-                      {/* EMAIL */}
-
-                      <td>
-                        <span className="employee-email">
-                          {employee.email || "-"}
-                        </span>
-                      </td>
-
-                      {/* DEPARTMENT */}
-
-                      <td>
-
-                        <span className="department-text">
-
-                          {employee.department?.name ??
-                            employee.department_id ??
-                            "-"}
-
-                        </span>
-
-                      </td>
-
-                      {/* DESIGNATION */}
-
-                      <td>
-
-                        <span className="designation-text">
-
-                          {employee.designation || "-"}
-
-                        </span>
-
-                      </td>
-
-                      {/* STATUS */}
-
-                      <td>
-
-                        <span
-                          className={getStatusClass(
-                            employee.employment_status
-                          )}
-                        >
-
-                          <span className="status-dot" />
-
-                          {getStatusLabel(
-                            employee.employment_status
-                          )}
-
-                        </span>
-
-                      </td>
-
-                      {/* ACTION */}
-
-                      <td className="action-column">
-
-                        <button
-                          className="view-employee-btn"
-                          onClick={() =>
-                            navigate(
-                              `/employees/${employee.id}`
-                            )
-                          }
-                        >
-                          <span>View</span>
-                          <span className="arrow">
-                            →
-                          </span>
-                        </button>
-
-                      </td>
+                      <th className="action-column">
+                        ACTION
+                      </th>
 
                     </tr>
+                  </thead>
 
-                  ))}
+                  <tbody>
 
-                </tbody>
+                    {employees.map(
+                      (employee) => (
 
-              </table>
+                        <tr
+                          key={employee.id}
+                        >
 
-            </div>
+                          {/* EMPLOYEE */}
 
+                          <td>
+
+                            <div className="employee-profile">
+
+                              <div className="employee-avatar">
+                                {getInitials(
+                                  employee
+                                )}
+                              </div>
+
+                              <div className="employee-name">
+
+                                <strong>
+                                  {
+                                    employee.first_name
+                                  }{" "}
+                                  {
+                                    employee.last_name
+                                  }
+                                </strong>
+
+                                <span>
+                                  {
+                                    employee.employee_code
+                                  }
+                                </span>
+
+                              </div>
+
+                            </div>
+
+                          </td>
+
+                          {/* EMAIL */}
+
+                          <td>
+
+                            <span className="employee-email">
+                              {
+                                employee.email ||
+                                "-"
+                              }
+                            </span>
+
+                          </td>
+
+                          {/* DEPARTMENT */}
+
+                          <td>
+
+                            <span className="department-text">
+
+                              {
+                                employee
+                                  .department
+                                  ?.name ??
+                                employee.department_id ??
+                                "-"
+                              }
+
+                            </span>
+
+                          </td>
+
+                          {/* DESIGNATION */}
+
+                          <td>
+
+                            <span className="designation-text">
+
+                              {
+                                employee.designation ||
+                                "-"
+                              }
+
+                            </span>
+
+                          </td>
+
+                          {/* STATUS */}
+
+                          <td>
+
+                            <span
+                              className={getStatusClass(
+                                employee.employment_status
+                              )}
+                            >
+
+                              <span className="status-dot" />
+
+                              {getStatusLabel(
+                                employee.employment_status
+                              )}
+
+                            </span>
+
+                          </td>
+
+                          {/* ACTION */}
+
+                          <td className="action-column">
+
+                            <button
+                              className="view-employee-btn"
+                              onClick={() =>
+                                navigate(
+                                  `/employees/${employee.id}`
+                                )
+                              }
+                            >
+                              <span>
+                                View
+                              </span>
+
+                              <span className="arrow">
+                                →
+                              </span>
+                            </button>
+
+                          </td>
+
+                        </tr>
+
+                      )
+                    )}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+              {/* ===============================================
+                  PAGINATION
+              =============================================== */}
+
+              {totalPages > 1 && (
+
+                <div className="employee-pagination">
+
+                  <div className="pagination-info">
+
+                    Showing{" "}
+                    <strong>
+                      {startRecord}
+                    </strong>
+                    {" – "}
+                    <strong>
+                      {endRecord}
+                    </strong>
+                    {" of "}
+                    <strong>
+                      {totalEmployees}
+                    </strong>
+                    {" employees"}
+
+                  </div>
+
+                  <div className="pagination-controls">
+
+                    {/* PREVIOUS */}
+
+                    <button
+                      className="pagination-btn pagination-prev"
+                      disabled={currentPage === 1}
+                      onClick={() =>
+                        handlePageChange(
+                          currentPage - 1
+                        )
+                      }
+                    >
+                      ← Previous
+                    </button>
+
+                    {/* PAGE NUMBERS */}
+
+                    <div className="pagination-pages">
+
+                      {getPageNumbers().map(
+                        (page, index) => {
+
+                          if (page === "...") {
+                            return (
+                              <span
+                                key={`dots-${index}`}
+                                className="pagination-dots"
+                              >
+                                ...
+                              </span>
+                            );
+                          }
+
+                          return (
+                            <button
+                              key={page}
+                              className={`pagination-page ${
+                                currentPage === page
+                                  ? "active"
+                                  : ""
+                              }`}
+                              onClick={() =>
+                                handlePageChange(
+                                  page
+                                )
+                              }
+                            >
+                              {page}
+                            </button>
+                          );
+                        }
+                      )}
+
+                    </div>
+
+                    {/* NEXT */}
+
+                    <button
+                      className="pagination-btn pagination-next"
+                      disabled={
+                        currentPage === totalPages
+                      }
+                      onClick={() =>
+                        handlePageChange(
+                          currentPage + 1
+                        )
+                      }
+                    >
+                      Next →
+                    </button>
+
+                  </div>
+
+                </div>
+
+              )}
+
+              {/* LOADING OVERLAY */}
+
+              {loading && (
+                <div className="employees-table-loading">
+                  <div className="loading-spinner" />
+                  <span>
+                    Loading...
+                  </span>
+                </div>
+              )}
+
+            </>
           )}
 
         </div>
