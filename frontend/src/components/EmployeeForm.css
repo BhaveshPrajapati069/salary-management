@@ -1,0 +1,533 @@
+/* =========================================================
+   EMPLOYEE FORM
+========================================================= */
+
+.employee-form-card {
+  background: #ffffff;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 2px 5px rgba(16, 24, 40, 0.04),
+    0 1px 2px rgba(16, 24, 40, 0.03);
+}
+
+.employee-form-header {
+  padding: 20px 26px;
+  border-bottom: 1px solid #eaecf0;
+  background: #ffffff;
+}
+
+.employee-form-header h3 {
+  margin: 0;
+  color: #101828;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.employee-form-header p {
+  margin: 5px 0 0;
+  color: #667085;
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.employee-form-error {
+  margin: 18px 26px 0;
+  padding: 12px 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+  border-radius: 8px;
+
+  color: #b42318;
+  font-size: 13px;
+}
+
+.employee-form-error > span {
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  background: #f04438;
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.employee-form-error > div {
+  flex: 1;
+}
+
+.employee-form-error button {
+  border: none;
+  background: transparent;
+
+  color: #b42318;
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.employee-form {
+  padding: 24px 26px;
+}
+
+.employee-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px 16px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+
+/* =========================================================
+   FIELD
+========================================================= */
+
+.form-field {
+  min-width: 0;
+}
+
+.form-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #344054;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.form-field label span {
+  color: #d92d20;
+  margin-left: 3px;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 12px;
+
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #101828;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  outline: none;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.form-field input::placeholder {
+  color: #98a2b3;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-field small {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #98a2b3;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   LABEL ROW
+========================================================= */
+
+.form-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 7px;
+}
+
+.form-label-row label {
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+   ADD COUNTRY / DEPARTMENT
+========================================================= */
+
+.add-master-btn {
+  border: none;
+  background: transparent;
+
+  color: #2563eb;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  padding: 0;
+}
+
+.add-master-btn:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   FORM ACTIONS
+========================================================= */
+
+.employee-form-actions {
+  margin-top: 24px;
+  padding-top: 18px;
+
+  border-top: 1px solid #eaecf0;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.primary-btn,
+.secondary-btn {
+  height: 38px;
+
+  padding: 0 16px;
+
+  border-radius: 7px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.primary-btn {
+  border: 1px solid #2563eb;
+
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.primary-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.secondary-btn {
+  border: 1px solid #d0d5dd;
+
+  background: #ffffff;
+  color: #344054;
+}
+
+.secondary-btn:hover:not(:disabled) {
+  background: #f9fafb;
+}
+
+.primary-btn:disabled,
+.secondary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button-spinner {
+  width: 13px;
+  height: 13px;
+
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+
+  border-radius: 50%;
+
+  animation: button-spin 0.7s linear infinite;
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.employee-form-loading {
+  min-height: 250px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.employee-form-loading p {
+  margin: 0;
+
+  color: #667085;
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.master-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 2000;
+
+  background: rgba(15, 23, 42, 0.48);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+}
+
+.master-modal {
+  width: 100%;
+  max-width: 500px;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 24px 48px rgba(16, 24, 40, 0.18),
+    0 4px 12px rgba(16, 24, 40, 0.08);
+
+  animation: modal-enter 0.15s ease-out;
+}
+
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.master-modal-header {
+  padding: 20px 22px;
+
+  border-bottom: 1px solid #eaecf0;
+
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.master-modal-header h3 {
+  margin: 0;
+
+  color: #101828;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.master-modal-header p {
+  margin: 5px 0 0;
+
+  color: #667085;
+
+  font-size: 12px;
+}
+
+.master-modal-close {
+  width: 30px;
+  height: 30px;
+
+  border: none;
+
+  background: #f2f4f7;
+
+  color: #667085;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  font-size: 20px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  line-height: 1;
+}
+
+.master-modal-close:hover {
+  background: #eaecf0;
+  color: #344054;
+}
+
+.master-modal form {
+  padding: 22px;
+}
+
+.modal-two-columns {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-top: 16px;
+}
+
+.master-modal-actions {
+  margin-top: 24px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #eaecf0;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 9px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+  .employee-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .employee-form {
+    padding: 20px;
+  }
+
+  .employee-form-header {
+    padding: 18px 20px;
+  }
+
+  .employee-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .employee-form-actions button {
+    width: 100%;
+  }
+
+  .modal-two-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .master-modal {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .employee-form {
+    padding: 16px;
+  }
+
+  .employee-form-header {
+    padding: 16px;
+  }
+
+  .form-label-row {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .add-master-btn {
+    white-space: nowrap;
+  }
+}

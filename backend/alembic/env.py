@@ -5,7 +5,13 @@ from sqlalchemy import engine_from_config, pool
 
 from app.core.config import settings
 from app.core.database import Base
-from app.models import Country, Department, Employee
+from app.models import (
+    Country,
+    Department,
+    Employee,
+    SalaryHistory,
+    SalaryRecord,
+)
 
 config = context.config
 

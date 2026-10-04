@@ -1,0 +1,450 @@
+/* frontend/src/pages/EmployeeEdit.css */
+.employee-edit-page {
+  min-height: calc(100vh - 70px);
+  background: #f6f8fc;
+  padding: 36px 24px 60px;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.employee-edit-wrapper {
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+
+.employee-edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.employee-edit-breadcrumb {
+  color: #667085;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.employee-edit-breadcrumb span {
+  color: #98a2b3;
+  margin: 0 5px;
+}
+
+.employee-edit-header h1 {
+  margin: 0;
+  color: #101828;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.employee-edit-header p {
+  margin: 7px 0 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+.employee-back-btn {
+  height: 42px;
+  padding: 0 17px;
+
+  background: white;
+  color: #344054;
+
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.employee-back-btn:hover {
+  background: #f9fafb;
+  border-color: #98a2b3;
+}
+
+/* ALERT */
+
+.employee-edit-alert {
+  display: flex;
+  gap: 12px;
+
+  padding: 14px 16px;
+  margin-bottom: 20px;
+
+  border-radius: 9px;
+
+  font-size: 14px;
+}
+
+.employee-edit-alert p {
+  margin: 3px 0 0;
+}
+
+.employee-edit-alert-error {
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+  color: #b42318;
+}
+
+.employee-edit-alert-success {
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+  color: #027a48;
+}
+
+.alert-icon {
+  width: 22px;
+  height: 22px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* CARD */
+
+.employee-edit-card {
+  background: white;
+
+  border: 1px solid #e4e7ec;
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 2px 6px rgba(16, 24, 40, 0.04),
+    0 1px 2px rgba(16, 24, 40, 0.03);
+}
+
+/* CARD HEADER */
+
+.employee-edit-card-header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  padding: 22px 26px;
+
+  border-bottom: 1px solid #eaecf0;
+}
+
+.employee-edit-card-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eff6ff;
+  border-radius: 10px;
+
+  font-size: 20px;
+}
+
+.employee-edit-card-header h2 {
+  margin: 0;
+
+  color: #101828;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.employee-edit-card-header p {
+  margin: 4px 0 0;
+
+  color: #667085;
+
+  font-size: 13px;
+}
+
+/* SECTION */
+
+.employee-section {
+  padding: 28px 26px;
+
+  border-bottom: 1px solid #eaecf0;
+}
+
+.employee-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.employee-section-title h3 {
+  margin: 0;
+
+  color: #344054;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.employee-section-title span {
+  color: #98a2b3;
+  font-size: 12px;
+}
+
+/* GRID */
+
+.employee-form-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+/* FIELD */
+
+.employee-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-field label {
+  margin-bottom: 7px;
+
+  color: #344054;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.employee-field label span {
+  color: #d92d20;
+  margin-left: 3px;
+}
+
+.employee-field input,
+.employee-field select {
+  width: 100%;
+  height: 44px;
+
+  padding: 0 13px;
+
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+
+  background: white;
+
+  color: #101828;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.employee-field input::placeholder {
+  color: #98a2b3;
+}
+
+.employee-field input:focus,
+.employee-field select:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.employee-field select {
+  cursor: pointer;
+}
+
+.employee-field-wide {
+  grid-column: span 1;
+}
+
+/* FOOTER */
+
+.employee-form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  padding: 20px 26px;
+
+  background: #fcfcfd;
+}
+
+.employee-cancel-btn,
+.employee-save-btn {
+  height: 42px;
+
+  padding: 0 18px;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.employee-cancel-btn {
+  background: white;
+
+  border: 1px solid #d0d5dd;
+
+  color: #344054;
+}
+
+.employee-cancel-btn:hover {
+  background: #f9fafb;
+}
+
+.employee-save-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: #2563eb;
+
+  border: 1px solid #2563eb;
+
+  color: white;
+
+  min-width: 145px;
+
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.18);
+}
+
+.employee-save-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.employee-save-btn:disabled,
+.employee-cancel-btn:disabled,
+.employee-back-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* BUTTON LOADING */
+
+.button-spinner {
+  width: 15px;
+  height: 15px;
+
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+
+  border-radius: 50%;
+
+  animation: employee-spin 0.7s linear infinite;
+}
+
+@keyframes employee-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* PAGE LOADING */
+
+.employee-edit-loading {
+  min-height: 500px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+}
+
+.employee-edit-loading p {
+  margin: 0;
+
+  color: #667085;
+
+  font-size: 14px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .employee-edit-page {
+    padding: 24px 14px 40px;
+  }
+
+  .employee-edit-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .employee-back-btn {
+    width: 100%;
+  }
+
+  .employee-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-section {
+    padding: 22px 18px;
+  }
+
+  .employee-edit-card-header {
+    padding: 20px 18px;
+  }
+
+  .employee-form-footer {
+    padding: 18px;
+
+    flex-direction: column-reverse;
+  }
+
+  .employee-save-btn,
+  .employee-cancel-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .employee-edit-page {
+    padding: 18px 10px 30px;
+  }
+
+  .employee-edit-header h1 {
+    font-size: 25px;
+  }
+
+  .employee-section-title {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
